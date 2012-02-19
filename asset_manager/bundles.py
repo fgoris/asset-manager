@@ -126,8 +126,7 @@ class Bundle(object):
                                     attrs["path_base"],
                                     attrs["url_base"],
                                     attrs["files"], 
-                                    attrs.get("externs", None),
-                                    attrs.get("minify", True))
+                                    attrs.get("externs", None))
         elif attrs["type"] == "css":
             return CssBundle(attrs["file_name"],
                              attrs["path_base"],
@@ -194,13 +193,12 @@ class JavascriptBundle(Bundle):
 
     """Bundle for JavaScript."""
 
-    def __init__(self, file_name, path_base, url_base, files, externs, minify=True):
+    def __init__(self, file_name, path_base, url_base, files, externs):
         super(JavascriptBundle, self).__init__(file_name,
                                                path_base,
                                                url_base,
                                                files)
         self.externs = self.parse_files(externs, path) if externs else None
-        self.do_minify = minify
 
     @property
     def type(self):
@@ -211,23 +209,17 @@ class JavascriptBundle(Bundle):
 
     @property
     def _minify_command(self):
-        if self.do_minify:
-            command = 'java -jar %s --js_output_file %s' % (
-                    os.path.join(os.path.dirname(__file__),
-                                 'bin',
-                                 'compiler.jar'),
-                    self.bundle_path,
-            )
-            for file in self.full_path_files:
-                command = '%s --js %s' % (command, file)
-            if self.externs:
-                for extern in self.get_externs():
-                    command = '%s --externs %s' % (command, extern)
-        else:
-            command = "cat"
-            for file in self.full_path_files:
-                command = "%s %s" % (command, file)
-            command = "%s > %s" % (command, self.bundle_path)
+        command = 'java -jar %s --js_output_file %s' % (
+                os.path.join(os.path.dirname(__file__),
+                             'bin',
+                             'compiler.jar'),
+                self.bundle_path,
+        )
+        for file in self.full_path_files:
+            command = '%s --js %s' % (command, file)
+        if self.externs:
+            for extern in self.get_externs():
+                command = '%s --externs %s' % (command, extern)
         return command
 
     def minify(self):
@@ -267,7 +259,7 @@ class CssBundle(Bundle):
         return 'java -jar {yui_path} --type css -o {css_path} {tmp_path}' \
             .format(yui_path=os.path.join(os.path.dirname(__file__),
                                           'bin',
-                                          'yuicompressor-2.4.7.jar'),
+                                          'yuicompressor-2.4.2.jar'),
                     css_path=self.bundle_path,
                     tmp_path=self._tmp_path)
 
