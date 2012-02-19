@@ -259,7 +259,7 @@ class CssBundle(Bundle):
         return 'java -jar {yui_path} --type css -o {css_path} {tmp_path}' \
             .format(yui_path=os.path.join(os.path.dirname(__file__),
                                           'bin',
-                                          'yuicompressor-2.4.2.jar'),
+                                          'yuicompressor-2.4.7.jar'),
                     css_path=self.bundle_path,
                     tmp_path=self._tmp_path)
 

@@ -63,7 +63,7 @@ class TestBundles(unittest.TestCase):
                                                           
         bin_path = os.path.join(os.path.dirname(bundles.__file__), 'bin')
         self.assertEqual(bundle._minify_command,
-            'java -jar {bin}{sep}yuicompressor-2.4.2.jar --type css '
+            'java -jar {bin}{sep}yuicompressor-2.4.7.jar --type css '
             '-o {css_path}{sep}bundle.min.css {css_path}{sep}bundle.min.css.tmp'
             .format(bin=bin_path,
                 css_path=path_base,
