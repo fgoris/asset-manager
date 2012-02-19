@@ -120,10 +120,10 @@ class TestBundles(unittest.TestCase):
                                'bundle.min.css'), 'r') as file:
             file_contents = file.read()
             self.assertEqual(file_contents,
-                             '.green{color:green;}#nice{color:#fff;}#try{color:'
-                             '#fefefe;}#oh{color:#e96;}#my{color:#e96;}h1{'
-                             'font-weight:bold;font-weight:normal;}h2.smaller'
-                             '{font-size:12px;}')
+                             '.green{color:green}#nice{color:#fff}#try{color:'
+                             '#fefefe}#oh{color:#e96}#my{color:#e96}h1{'
+                             'font-weight:bold;font-weight:normal}h2.smaller'
+                             '{font-size:12px}')
         # ensure tmp file is removed after minification
         try:
             with open(os.path.join(self.setup_path,
@@ -141,9 +141,9 @@ class TestBundles(unittest.TestCase):
                                'testcss',
                                'bundle3.min.css'), 'r') as file:
             file_contents = file.read()
-            self.assertEqual(len(file_contents), 7386)
+            self.assertEqual(len(file_contents), 7383)
             self.assertEqual(file_contents.count('data:image/png;base64'), 2)
-            self.assertEqual(file_contents.count('#try{color:#fefefe;}'), 1)
+            self.assertEqual(file_contents.count('#try{color:#fefefe}'), 1)
 
     def test_minify_js(self):
         bundle = self.bundle_manager.get('bundle.js')
@@ -215,13 +215,13 @@ class TestBundles(unittest.TestCase):
             file_contents = file.read()
             self.assertEqual(file_contents,
                              '.sprite{background-image:url(\'/images/sprite.png'
-                             '\');}.sprite-test2{width:50px;background-position'
-                             ':0 0;height:60px;}.sprite-test1{width:20px;backgr'
-                             'ound-position:0 -60px;height:25px;}'
-                             '.green{color:green;}#nice{color:#fff;}#try{color:'
-                             '#fefefe;}#oh{color:#e96;}#my{color:#e96;}h1{'
-                             'font-weight:bold;font-weight:normal;}h2.smaller'
-                             '{font-size:12px;}')
+                             '\')}.sprite-test2{width:50px;background-position'
+                             ':0 0;height:60px}.sprite-test1{width:20px;backgr'
+                             'ound-position:0 -60px;height:25px}'
+                             '.green{color:green}#nice{color:#fff}#try{color:'
+                             '#fefefe}#oh{color:#e96}#my{color:#e96}h1{'
+                             'font-weight:bold;font-weight:normal}h2.smaller'
+                             '{font-size:12px}')
 
 
 class TestPrintingHtmlOfBundles(unittest.TestCase):
@@ -259,10 +259,10 @@ class TestPrintingHtmlOfBundles(unittest.TestCase):
         bundle_manager.get('bundle.js').minify()
         
         self.assertEqual(bundle_manager.get_html('bundle.css', True),
-            '<style type="text/css">.green{color:green;}#nice{color:#fff;}'
-            '#try{color:#fefefe;}#oh{color:#e96;}#my{color:#e96;}h1'
-            '{font-weight:bold;font-weight:normal;}h2.smaller'
-            '{font-size:12px;}</style>')
+            '<style type="text/css">.green{color:green}#nice{color:#fff}'
+            '#try{color:#fefefe}#oh{color:#e96}#my{color:#e96}h1'
+            '{font-weight:bold;font-weight:normal}h2.smaller'
+            '{font-size:12px}</style>')
         self.assertEqual(bundle_manager.get_html('bundle.js', True),
             '<script type="text/javascript">/* <![CDATA[ */var '
             'helloVariable="hello",sayHello=function(){alert(helloVariable)};'
@@ -276,7 +276,7 @@ class TestPrintingHtmlOfBundles(unittest.TestCase):
                                        domain='')
         self.assertEqual(bundle_manager.get_html('bundle2.css'),
             '<link rel="stylesheet" type="text/css" '
-            'href="/styles/bundle2.min.css">')
+            'href="/styles/bundle2.min.css"/>')
         self.assertEqual(bundle_manager.get_html('bundle.js'),
             '<script type="text/javascript" '
             'src="/scripts/bundle.min.js"></script>')
@@ -287,7 +287,7 @@ class TestPrintingHtmlOfBundles(unittest.TestCase):
                                        domain='http://static.test.com')
         self.assertEqual(bundle_manager.get_html('bundle2.css'),
             '<link rel="stylesheet" type="text/css" '
-            'href="http://static.test.com/styles/bundle2.min.css">')
+            'href="http://static.test.com/styles/bundle2.min.css"/>')
         self.assertEqual(bundle_manager.get_html('bundle.js'),
             '<script type="text/javascript" '
             'src="http://static.test.com/scripts/bundle.min.js"></script>')
@@ -298,11 +298,11 @@ class TestPrintingHtmlOfBundles(unittest.TestCase):
                                        domain='')
         self.assertEqual(bundle_manager.get_html('bundle2.css'),
             '<link rel="stylesheet" type="text/css" '
-            'href="/styles/sprite.css">'
+            'href="/styles/sprite.css"/>'
             '<link rel="stylesheet" type="text/css" '
-            'href="/styles/color.css">'
+            'href="/styles/color.css"/>'
             '<link rel="stylesheet" type="text/css" '
-            'href="/styles/text.css">')
+            'href="/styles/text.css"/>')
         self.assertEqual(bundle_manager.get_html('bundle.js'),
             '<script type="text/javascript" '
             'src="/scripts/page1.js"></script>'
@@ -315,11 +315,11 @@ class TestPrintingHtmlOfBundles(unittest.TestCase):
                                        domain='http://static.test.com')
         self.assertEqual(bundle_manager.get_html('bundle2.css'),
             '<link rel="stylesheet" type="text/css" '
-            'href="http://static.test.com/styles/sprite.css">'
+            'href="http://static.test.com/styles/sprite.css"/>'
             '<link rel="stylesheet" type="text/css" '
-            'href="http://static.test.com/styles/color.css">'
+            'href="http://static.test.com/styles/color.css"/>'
             '<link rel="stylesheet" type="text/css" '
-            'href="http://static.test.com/styles/text.css">')
+            'href="http://static.test.com/styles/text.css"/>')
         self.assertEqual(bundle_manager.get_html('bundle.js'),
             '<script type="text/javascript" '
             'src="http://static.test.com/scripts/page1.js"></script>'
