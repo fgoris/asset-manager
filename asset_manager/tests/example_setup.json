@@ -20,6 +20,16 @@
             "img.css"
         ]
     },
+    "bundle4.css": {
+        "type": "css",
+        "file_name": "bundle4.min.css",
+        "path_base": "testcss",
+        "url_base": "/styles/",
+        "data_uri_images": true,
+        "files": [
+            "media.css"
+        ]
+    },
     "bundle.css": {
         "type": "css",
         "file_name": "bundle.min.css",
@@ -38,6 +48,17 @@
         "files": [
             "page1.js",
             "page2.js"
+        ]
+    },
+    "bundle2.js": {
+        "type": "js",
+        "file_name": "bundle2.min.js",
+        "path_base": "testjs",
+        "url_base": "/scripts/",
+        "minify": false,
+        "files": [
+            "page1.min.js",
+            "page2.min.js"
         ]
     },
     "sprite.png": {

@@ -28,9 +28,11 @@ def _remove_static_files():
     _remove_static_file('testcss', 'bundle.min.css')
     _remove_static_file('testcss', 'bundle2.min.css')
     _remove_static_file('testcss', 'bundle3.min.css')
+    _remove_static_file('testcss', 'bundle4.min.css')
     _remove_static_file('testcss', 'sprite.css')
     _remove_static_file('testcss', 'sprite2.css')
     _remove_static_file('testjs', 'bundle.min.js')
+    _remove_static_file('testjs', 'bundle2.min.js')
     _remove_static_file('testimg', 'sprite.png')
     _remove_static_file('testimg', 'sprite2.png')
 
@@ -60,7 +62,7 @@ class TestBundles(unittest.TestCase):
              os.path.join(path_base, 'text.css')])
         self.assertEqual(bundle.bundle_path, os.path.join(path_base,
                                                           'bundle.min.css'))
-                                                          
+
         bin_path = os.path.join(os.path.dirname(bundles.__file__), 'bin')
         self.assertEqual(bundle._minify_command,
             'java -jar {bin}{sep}yuicompressor-2.4.7.jar --type css '
@@ -145,6 +147,17 @@ class TestBundles(unittest.TestCase):
             self.assertEqual(file_contents.count('data:image/png;base64'), 2)
             self.assertEqual(file_contents.count('#try{color:#fefefe}'), 1)
 
+    def test_minify_css_with_media_tag(self):
+        bundle = self.bundle_manager.get('bundle4.css')
+        bundle.minify()
+        with open(os.path.join(self.setup_path,
+                               'testcss',
+                               'bundle4.min.css'), 'r') as file:
+            file_contents = file.read()
+            self.assertEqual(file_contents,
+                             '@media all and (min-width:1400px){'
+                             '.container{width:1200px}}')
+
     def test_minify_js(self):
         bundle = self.bundle_manager.get('bundle.js')
         bundle.minify()
@@ -156,6 +169,20 @@ class TestBundles(unittest.TestCase):
                              'var helloVariable="hello",sayHello=function(){'
                              'alert(helloVariable)};sayHello();(function(){'
                              'alert("hello")})();\n')
+
+    def test_dont_minify_js(self):
+        bundle = self.bundle_manager.get('bundle2.js')
+        bundle.minify()
+        with open(os.path.join(self.setup_path,
+                               'testjs',
+                               'bundle2.min.js'), 'r') as file:
+            file_contents = file.read()
+            self.assertEqual(file_contents,
+                             '// This comment should stay here.\n'
+                             'var helloVariable="hello",sayHello=function(){'
+                             'alert(helloVariable)};sayHello();\n'
+                             '/* This comment should also stay here. */\n'
+                             '(function(){alert("hello")})();\n')
 
     def test_minify_image_in_sub_folders(self):
         bundle = self.bundle_manager.get('sprite2.png')
@@ -257,7 +284,7 @@ class TestPrintingHtmlOfBundles(unittest.TestCase):
 
         bundle_manager.get('bundle.css').minify()
         bundle_manager.get('bundle.js').minify()
-        
+
         self.assertEqual(bundle_manager.get_html('bundle.css', True),
             '<style type="text/css">.green{color:green}#nice{color:#fff}'
             '#try{color:#fefefe}#oh{color:#e96}#my{color:#e96}h1'
@@ -269,7 +296,7 @@ class TestPrintingHtmlOfBundles(unittest.TestCase):
             'sayHello();(function(){alert("hello")})();\n/* ]]> */</script>')
 
         _remove_static_files()
-            
+
     def test_no_domain_minified(self):
         bundle_manager = AssetManager(json_setup_path,
                                        print_minified=True,
